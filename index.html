@@ -164,7 +164,6 @@ p {
 		var r = new XMLHttpRequest
 		r.open( "GET", "clock.appcache", true )
 		r.onreadystatechange = function () {
-			console.log( r.readyState )
 			if ( r.readyState !== r.DONE )
 				return
 			r.responseText.split( "\n" ).forEach( function ( url ) {
