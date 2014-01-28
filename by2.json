@@ -1,0 +1,24 @@
+{
+	"clockAppearance": true,
+	"name": "Bielaruskaja",
+	"title": "Hadzińnik",
+	"dateFormat": "#{number} #{month}",
+	"months": [
+		"studzienia",
+		"liutaha",
+		"sakavika",
+		"krasavika",
+		"traŭnia",
+		"červienia",
+		"lipienia",
+		"žniŭnia",
+		"vieraśnia",
+		"kastryčnika",
+		"listapada",
+		"śniežnia"
+	],
+	"numbers": [
+	],
+	"days": [
+	]
+}

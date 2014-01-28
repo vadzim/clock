@@ -1,9 +1,13 @@
-<html manifest="standalone.appcache">
+<!--
+todo:
+	* зьмена здымкаў фонам :)
+-->
+<html manifest="clock.appcache">
 <head>
 <meta charset="utf-8">
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<title>Гадзіньнік</title>
+<title id="title">..</title>
 
 <style type="text/css">
 body, html {
@@ -66,23 +70,59 @@ p {
 			><span id="delimiter">:</span
 			><span id="minutes">..</span
 			><span id="ampm">..</span
-			><span id="date">
-				<span id="number">..</span> <span id="month">..</span>
-			</span
+			><span id="date">..</span
 			><span id="year">..</span
 			>
 		</span>
 	</p>
 </div
 ><script type="text/javascript">
+	"use strict"
+	var defaultLanguage = {
+		"clockAppearance": true,
+		"name": "Беларуская",
+		"title": "Гадзіньнік",
+		"dateFormat": "#{number} #{month}",
+		"months": [
+			"студзеня",
+			"лютага",
+			"сакавіка",
+			"красавіка",
+			"траўня",
+			"чэрвеня",
+			"ліпеня",
+			"жніўня",
+			"верасьня",
+			"кастрычніка",
+			"лістапада",
+			"сьнежня"
+		],
+		"numbers": [
+		],
+		"days": [
+		]
+	}
+	var activeLanguage = defaultLanguage
+	var languages = {}
+
+	function addLanguage( lang ) {
+		if ( lang.clockAppearance )
+			languages[ lang.name ] = lang
+	}
+
+	addLanguage( defaultLanguage )
+
 	function setTimer() {
 		setTimeout( updateTime, 60000 - Date.now() % 60000 )
 	}
+
 	updateTime()
+	
 	function setContent( element, text ) {
 		if ( element.innerHTML !== text )
 			element.innerHTML = text
 	}
+
 	function updateTime() {
 		var x = new Date
 		var h = x.getHours()
@@ -106,23 +146,41 @@ p {
 			m = "0" + m
 		setContent( hours, h )
 		setContent( minutes, m )
-		setContent( number, x.getDate() )
-		setContent( month, [
-			"студзеня",
-			"лютага",
-			"сакавіка",
-			"красавіка",
-			"траўня",
-			"чэрвеня",
-			"ліпеня",
-			"жніўня",
-			"верасьня",
-			"кастрычніка",
-			"лістапада",
-			"сьнежня"
-		][ x.getMonth() ] )
+		setContent( date,
+			( activeLanguage.dateFormat || defaultLanguage.dateFormat )
+			.replace( "#{month}", ( activeLanguage.months || defaultLanguage.months )[ x.getMonth() ] || ( x.getMonth() + 1 ) )
+			.replace( "#{number}", ( activeLanguage.days || defaultLanguage.days )[ x.getDate() - 1 ] || ( x.getDate() ) )
+		)
 		setContent( year, x.getFullYear() )
+		setContent( title, activeLanguage.title || defaultLanguage.title )
 		setTimer()
 	}
+	
 	setInterval( function () { delimiter.classList.toggle( "off" ) }, 500 )
+
+	loadLanguages()
+
+	function loadLanguages() {
+		var r = new XMLHttpRequest
+		r.open( "GET", "clock.appcache", true )
+		r.onreadystatechange = function () {
+			if ( r.readyState !== r.DONE )
+				return
+			r.responseText.split( "\n" ).forEach( function ( url ) {
+				if ( url.match( /\.json$/ ) )
+					loadLanguageUrl( url )
+			} )
+		}
+	}
+
+	function loadLanguageUrl( url ) {
+		var r = new XMLHttpRequest
+		r.open( "GET", url, true )
+		r.onreadystatechange = function () {
+			if ( r.readyState !== r.DONE )
+				return
+			addLanguage( JSON.parse( r.responseText ) )
+		}
+	}
+
 </script></body></html>
