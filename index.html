@@ -36,14 +36,12 @@ p {
 .off {
 	visibility: hidden;
 }
-#time {
-	font-size: 11cm;
-}
 #time, #date, #year {
 	display: block;
 }
 #time {
 	position: relative;
+	font-size: 11cm;
 }
 #date, #ampm {
 	color: #333;
@@ -228,7 +226,9 @@ p {
 		r.onreadystatechange = function () {
 			if ( r.readyState !== r.DONE )
 				return
-			addLanguage( JSON.parse( r.responseText ) )
+			var data = JSON.parse( r.responseText )
+			data.sorting = data.sorting || url || data.name
+			addLanguage( data )
 			updateTime()
 		}
 		r.send()
@@ -239,7 +239,9 @@ p {
 	function toggleMenu( event ) {
 		if ( languageMenu.classList.contains( "off" ) ) {
 			var m = document.createElement( "div" )
-			Object.keys( languages ).forEach( function ( name ) {
+			Object.keys( languages ).sort( function ( a, b ) {
+				return a.sorting < b.sorting ? -1 : a.sorting > b.sorting ? 1 : 0
+			} ).forEach( function ( name ) {
 				var s = document.createElement( "span" )
 				s.classList.add( "menuLangItem" )
 				s.lanuageName = name
