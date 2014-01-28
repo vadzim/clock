@@ -164,6 +164,7 @@ p {
 		var r = new XMLHttpRequest
 		r.open( "GET", "clock.appcache", true )
 		r.onreadystatechange = function () {
+			console.log( r.readyState )
 			if ( r.readyState !== r.DONE )
 				return
 			r.responseText.split( "\n" ).forEach( function ( url ) {
@@ -171,6 +172,7 @@ p {
 					loadLanguageUrl( url )
 			} )
 		}
+		r.send()
 	}
 
 	function loadLanguageUrl( url ) {
@@ -179,8 +181,10 @@ p {
 		r.onreadystatechange = function () {
 			if ( r.readyState !== r.DONE )
 				return
+			console.log( r.responseText )
 			addLanguage( JSON.parse( r.responseText ) )
 		}
+		r.send()
 	}
 
 </script></body></html>
