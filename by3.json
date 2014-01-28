@@ -2,7 +2,7 @@
 	"clockAppearance": true,
 	"name": "Наркамаўка",
 	"title": "Гадзіннік",
-	"dateFormat": "#{number} #{month}",
+	"dateFormat": "#{weekDay}, #{number} #{month}",
 	"months": [
 		"студзеня",
 		"лютага",

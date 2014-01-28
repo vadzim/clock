@@ -2,7 +2,7 @@
 	"clockAppearance": true,
 	"name": "Bielaruskaja",
 	"title": "Hadzińnik",
-	"dateFormat": "#{number} #{month}",
+	"dateFormat": "#{weekDay}, #{number} #{month}",
 	"months": [
 		"studzienia",
 		"liutaha",
