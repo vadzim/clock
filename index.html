@@ -70,6 +70,9 @@ p {
 	display: block;
 	cursor: pointer;
 }
+.menuLangActive {
+	color: silver;
+}
 .menuLangItem:hover {
 	padding-left: 0.25em;
 }
@@ -244,6 +247,8 @@ p {
 			} ).forEach( function ( name ) {
 				var s = document.createElement( "span" )
 				s.classList.add( "menuLangItem" )
+				if ( name === activeLanguage.name )
+					s.classList.add( "menuLangActive" )
 				s.lanuageName = name
 				s.appendChild( document.createTextNode( name ) )
 				s.addEventListener( "click", langClick )
