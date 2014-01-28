@@ -214,10 +214,22 @@ p {
 		setContent( year, x.getFullYear() )
 		setContent( title, activeLanguage.title || defaultLanguage.title )
 	}
-	
-	setTimeout( function () {
-		setInterval( function () { delimiter.classList.toggle( "off" ) }, 500 )
-	}, 1000 - Date.now() % 1000 )
+
+	void function ticks() {
+		
+		function tickOn() { delimiter.classList.remove( "off" ), sheduleTick( false ) }
+		function tickOff() { delimiter.classList.add( "off" ), sheduleTick( true ) }
+		
+		function sheduleTick( on ) {
+			var x = 1000 - Date.now() % 1000
+			if ( on )
+				setTimeout( tickOn, x || 1000 )
+			else
+				setTimeout( tickOff, ( x + 500 ) % 1000 || 500 )
+		}
+
+		sheduleTick( true )
+	}()
 
 	function loadLanguages() {
 		var r = new XMLHttpRequest
