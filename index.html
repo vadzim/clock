@@ -215,7 +215,9 @@ p {
 		setContent( title, activeLanguage.title || defaultLanguage.title )
 	}
 	
-	setInterval( function () { delimiter.classList.toggle( "off" ) }, 500 )
+	setTimeout( function () {
+		setInterval( function () { delimiter.classList.toggle( "off" ) }, 500 )
+	}, 1000 - Date.now() % 1000 )
 
 	function loadLanguages() {
 		var r = new XMLHttpRequest
