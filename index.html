@@ -181,7 +181,6 @@ p {
 		r.onreadystatechange = function () {
 			if ( r.readyState !== r.DONE )
 				return
-			console.log( r.responseText )
 			addLanguage( JSON.parse( r.responseText ) )
 		}
 		r.send()
