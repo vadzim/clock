@@ -251,7 +251,9 @@ p {
 		if ( languageMenu.classList.contains( "off" ) ) {
 			var m = document.createElement( "div" )
 			Object.keys( languages ).sort( function ( a, b ) {
-				return a.sorting < b.sorting ? -1 : a.sorting > b.sorting ? 1 : 0
+				a = languages[ a ].sorting
+				b = languages[ b ].sorting
+				return a < b ? -1 : a > b ? 1 : 0
 			} ).forEach( function ( name ) {
 				var s = document.createElement( "span" )
 				s.classList.add( "menuLangItem" )
