@@ -19,7 +19,6 @@ body, html {
 body {
 	background-color: black;
 	color: white;
-	font-size: 11cm;
 }
 div.container {
 	top: 0px;
@@ -36,6 +35,9 @@ p {
 }
 .off {
 	visibility: hidden;
+}
+#time {
+	font-size: 11cm;
 }
 #time, #date, #year {
 	display: block;
@@ -59,9 +61,23 @@ p {
 	width: 100%;
 	top: 102%;
 }
+#languageMenu {
+	display: block;
+	position: absolute;
+	left: 0.5em;
+	top: 0.5em;
+	font-size: 7mm;
+}
+.menuLangItem {
+	display: block;
+	cursor: pointer;
+}
+.menuLangItem:hover {
+	padding-left: 0.25em;
+}
 </style>
 
-</head><body>
+</head><body id="body">
 
 <div class="container">
 	<p>
@@ -76,6 +92,7 @@ p {
 		</span>
 	</p>
 </div
+><div id="languageMenu" class="off"></div
 ><script type="text/javascript">
 	"use strict"
 	var defaultLanguage = {
@@ -99,6 +116,15 @@ p {
 		],
 		"numbers": [
 		],
+		"weekDays": [
+			"нядзеля",
+			"панядзелак",
+			"аўторак",
+			"серада",
+			"чацьвер",
+			"пятніца",
+			"субота"
+		],
 		"days": [
 		]
 	}
@@ -112,11 +138,29 @@ p {
 
 	addLanguage( defaultLanguage )
 
-	function setTimer() {
-		setTimeout( updateTime, 60000 - Date.now() % 60000 )
-	}
+	var setTimer = function block() {
+		var timer = null 
+
+		function onTimer(argument) {
+			timer = null
+			try {
+				updateTime()
+			}
+			finally {
+				setTimer()
+			}
+		}
+
+		function setTimer() {
+			if ( timer == null )
+				timer = setTimeout( onTimer, 60000 - Date.now() % 60000 )
+		}
+
+		return setTimer
+	}()
 
 	updateTime()
+	setTimer()
 	
 	function setContent( element, text ) {
 		if ( element.innerHTML !== text )
@@ -124,6 +168,7 @@ p {
 	}
 
 	function updateTime() {
+		activeLanguage = languages[ activeLanguage.name ] || activeLanguage
 		var x = new Date
 		var h = x.getHours()
 		var m = x.getMinutes()
@@ -146,19 +191,22 @@ p {
 			m = "0" + m
 		setContent( hours, h )
 		setContent( minutes, m )
+		var info = {
+			month: ( activeLanguage.months || defaultLanguage.months )[ x.getMonth() ] || ( x.getMonth() + 1 ),
+			number: ( activeLanguage.numbers || defaultLanguage.numbers )[ x.getDate() - 1 ] || ( x.getDate() ),
+			weekDay: ( activeLanguage.weekDays || defaultLanguage.weekDays )[ x.getDay() ]
+		}
 		setContent( date,
 			( activeLanguage.dateFormat || defaultLanguage.dateFormat )
-			.replace( "#{month}", ( activeLanguage.months || defaultLanguage.months )[ x.getMonth() ] || ( x.getMonth() + 1 ) )
-			.replace( "#{number}", ( activeLanguage.days || defaultLanguage.days )[ x.getDate() - 1 ] || ( x.getDate() ) )
+			.replace( /\#\{(\w+)\}/g, function block( s ) {
+				return info[ s.slice( 2, -1 ) ] || ""
+			} )
 		)
 		setContent( year, x.getFullYear() )
 		setContent( title, activeLanguage.title || defaultLanguage.title )
-		setTimer()
 	}
 	
 	setInterval( function () { delimiter.classList.toggle( "off" ) }, 500 )
-
-	loadLanguages()
 
 	function loadLanguages() {
 		var r = new XMLHttpRequest
@@ -181,8 +229,36 @@ p {
 			if ( r.readyState !== r.DONE )
 				return
 			addLanguage( JSON.parse( r.responseText ) )
+			updateTime()
 		}
 		r.send()
 	}
+
+	body.addEventListener( "click", toggleMenu )
+
+	function toggleMenu( event ) {
+		if ( languageMenu.classList.contains( "off" ) ) {
+			var m = document.createElement( "div" )
+			Object.keys( languages ).forEach( function ( name ) {
+				var s = document.createElement( "span" )
+				s.classList.add( "menuLangItem" )
+				s.lanuageName = name
+				s.appendChild( document.createTextNode( name ) )
+				s.addEventListener( "click", langClick )
+				m.appendChild( s )
+			} )
+			if ( languageMenu.firstChild != null )
+				languageMenu.removeChild( languageMenu.firstChild )
+			languageMenu.appendChild( m )
+		}
+		languageMenu.classList.toggle( "off" )
+	}
+
+	function langClick( event ) {
+		activeLanguage = languages[ event.target.lanuageName ]
+		updateTime()
+	}
+
+	loadLanguages()
 
 </script></body></html>

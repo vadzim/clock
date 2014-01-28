@@ -2,7 +2,7 @@
 	"clockAppearance": true,
 	"name": "Беларуская",
 	"title": "Гадзіньнік",
-	"dateFormat": "#{number} #{month}",
+	"dateFormat": "#{weekDay}, #{number} #{month}",
 	"months": [
 		"студзеня",
 		"лютага",
@@ -18,6 +18,15 @@
 		"сьнежня"
 	],
 	"numbers": [
+	],
+	"weekDays": [
+		"нядзеля",
+		"панядзелак",
+		"аўторак",
+		"серада",
+		"чацьвер",
+		"пятніца",
+		"субота"
 	],
 	"days": [
 	]

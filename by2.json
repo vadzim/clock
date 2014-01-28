@@ -19,6 +19,15 @@
 	],
 	"numbers": [
 	],
+	"weekDays": [
+		"niadzielia",
+		"paniadzielak",
+		"aŭtorak",
+		"sierada",
+		"čaćvier",
+		"piatnica",
+		"subota"
+	],
 	"days": [
 	]
 }
