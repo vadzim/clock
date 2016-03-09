@@ -170,7 +170,7 @@ p {
 
 	updateTime()
 	setTimer()
-	
+
 	function setContent( element, text ) {
 		if ( element.innerHTML !== text )
 			element.innerHTML = text
@@ -215,21 +215,21 @@ p {
 		setContent( title, activeLanguage.title || defaultLanguage.title )
 	}
 
-	void function ticks() {
-		
-		function tickOn() { delimiter.classList.remove( "off" ), sheduleTick( false ) }
-		function tickOff() { delimiter.classList.add( "off" ), sheduleTick( true ) }
-		
-		function sheduleTick( on ) {
-			var x = 1000 - Date.now() % 1000
-			if ( on )
-				setTimeout( tickOn, x || 1000 )
-			else
-				setTimeout( tickOff, ( x + 500 ) % 1000 || 500 )
-		}
+	// void function ticks() {
 
-		sheduleTick( true )
-	}()
+	// 	function tickOn() { delimiter.classList.remove( "off" ), sheduleTick( false ) }
+	// 	function tickOff() { delimiter.classList.add( "off" ), sheduleTick( true ) }
+
+	// 	function sheduleTick( on ) {
+	// 		var x = 1000 - Date.now() % 1000
+	// 		if ( on )
+	// 			setTimeout( tickOn, x || 1000 )
+	// 		else
+	// 			setTimeout( tickOff, ( x + 500 ) % 1000 || 500 )
+	// 	}
+
+	// 	sheduleTick( true )
+	// }()
 
 	function loadLanguages() {
 		var r = new XMLHttpRequest
